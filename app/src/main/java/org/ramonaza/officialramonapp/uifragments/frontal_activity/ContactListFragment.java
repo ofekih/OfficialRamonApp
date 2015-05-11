@@ -17,6 +17,7 @@ import org.ramonaza.officialramonapp.datafiles.condrive_database.ContactInfoWrap
 import org.ramonaza.officialramonapp.uifragments.InfoWrapperButtonListFragment;
 
 import java.util.List;
+import java.util.Calendar;
 
 /**
  * Created by Ilan Scheinkman on 1/12/15.
@@ -60,13 +61,20 @@ public class ContactListFragment  extends InfoWrapperButtonListFragment {
 
     @Override
     public List<ContactInfoWrapper> generateInfo() {
+        int currentGradYear=getCurrentGradYear();
         ConDriveDatabaseHelper dbHelpter=new ConDriveDatabaseHelper(getActivity());
         SQLiteDatabase db=dbHelpter.getReadableDatabase();
-        Cursor cursor=db.rawQuery(String.format("SELECT * FROM %s ORDER BY %s ASC", ConDriveDatabaseContract.ContactListTable.TABLE_NAME, ConDriveDatabaseContract.ContactListTable.COLUMN_NAME), null);
+        Cursor cursor=db.rawQuery(String.format("SELECT * FROM %s ORDER BY %s ASC WHERE %d <= %d", ConDriveDatabaseContract.ContactListTable.TABLE_NAME, ConDriveDatabaseContract.ContactListTable.COLUMN_NAME, ConDriveDatabaseContract.ContactListTable.COLUMN_GRADYEAR, currentGradYear), null);
         return ContactInfoWrapperGenerator.fromDataBase(cursor);
     }
 
-
+    public void getCurrentGradYear()   {
+        Calendar c=Calendar.getInstance();
+        int year=c.get(Calendar.YEAR);
+        int month=c.get(Calendar.MONTH);
+        if(month>8) year--;
+        return year;
+    }
 
 }
 
