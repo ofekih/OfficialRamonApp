@@ -49,7 +49,7 @@ public class ContactInfoWrapper implements InfoWrapper{
             case 12:
                 return "Senior";
             default:
-                return "College";
+                return "Class of " + gradYear + " Alumn";
 
         }
     }
